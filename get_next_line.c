@@ -6,7 +6,7 @@
 /*   By: emandret <emandret@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/12 11:23:11 by emandret          #+#    #+#             */
-/*   Updated: 2017/01/12 22:00:24 by emandret         ###   ########.fr       */
+/*   Updated: 2017/01/12 23:10:35 by emandret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ int		read_until_endl(t_this *this, char **line)
 	{
 		buffer[ret] = '\0';
 		if ((this->left = cut_after_endl(buffer, &concat)))
-			break;
+			break ;
 	}
 	ft_memdel((void**)&buffer);
 	if (ret > 0 || *concat != '\0')
