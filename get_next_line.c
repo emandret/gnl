@@ -6,28 +6,28 @@
 /*   By: emandret <emandret@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/12 11:23:11 by emandret          #+#    #+#             */
-/*   Updated: 2017/01/12 21:36:34 by emandret         ###   ########.fr       */
+/*   Updated: 2017/01/12 22:00:24 by emandret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-t_bool	has_newline(char **line, char **left, char **concat)
+t_bool	has_newline(t_this *this, char **line, char **concat)
 {
 	char	*cut;
 
-	if (*left != NULL && (cut = ft_strchr(*left, '\n')))
+	if (this->left != NULL && (cut = ft_strchr(this->left, '\n')))
 	{
 		*cut = '\0';
-		*line = *left;
-		*left = ft_strdup(cut + 1);
+		*line = this->left;
+		this->left = ft_strdup(cut + 1);
 		return (true);
 	}
 	*concat = ft_strnew(0);
-	if (*left != NULL)
+	if (this->left != NULL)
 	{
-		*concat = ft_strjoin_free(*concat, *left);
-		ft_memdel((void**)left);
+		*concat = ft_strjoin_free(*concat, this->left);
+		ft_memdel((void**)&this->left);
 	}
 	return (false);
 }
@@ -46,19 +46,19 @@ char	*cut_after_endl(char *buffer, char **concat)
 	return (NULL);
 }
 
-int		read_until_endl(const int fd, char **line, char **left)
+int		read_until_endl(t_this *this, char **line)
 {
 	char	*buffer;
 	char	*concat;
 	int		ret;
 
-	if (has_newline(line, left, &concat))
+	if (has_newline(this, line, &concat))
 		return (1);
 	buffer = ft_strnew(BUFF_SIZE);
-	while ((ret = read(fd, buffer, BUFF_SIZE)) > 0)
+	while ((ret = read(this->fd, buffer, BUFF_SIZE)) > 0)
 	{
 		buffer[ret] = '\0';
-		if ((*left = cut_after_endl(buffer, &concat)))
+		if ((this->left = cut_after_endl(buffer, &concat)))
 			break;
 	}
 	ft_memdel((void**)&buffer);
@@ -73,11 +73,37 @@ int		read_until_endl(const int fd, char **line, char **left)
 	return (0);
 }
 
+t_this	*load_new_fd(const int fd, t_this *first)
+{
+	t_this	*new;
+
+	if (!(new = (t_this*)ft_memalloc(sizeof(t_this))))
+		return (NULL);
+	new->fd = fd;
+	new->left = NULL;
+	new->next = NULL;
+	if (first == NULL)
+		return (new);
+	new->next = first;
+	return (new);
+}
+
 int		get_next_line(const int fd, char **line)
 {
-	static char	*left = NULL;
+	static t_this	*first = NULL;
+	t_this			*this;
 
 	if (fd < 0 || line == NULL)
 		return (-1);
-	return (read_until_endl(fd, line, &left));
+	if (first != NULL)
+	{
+		this = first;
+		while (this->next != NULL && this->fd != fd)
+			this = this->next;
+		if (this->fd == fd)
+			return (read_until_endl(this, line));
+	}
+	if ((first = load_new_fd(fd, first)))
+		return (read_until_endl(first, line));
+	return (-1);
 }
