@@ -6,7 +6,7 @@
 /*   By: emandret <emandret@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/12 11:23:11 by emandret          #+#    #+#             */
-/*   Updated: 2017/01/13 21:32:10 by emandret         ###   ########.fr       */
+/*   Updated: 2017/01/13 21:35:42 by emandret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,6 @@ static char		*cut_after_endl(char *buffer, char **concat);
 static ssize_t	read_until_endl(t_this *this, char **line);
 static t_this	*load_new_fd(const int fd, t_this *first);
 
-/*
-** Check if a newline is present in the static stored content
-*/
 static t_bool	has_newline(t_this *this, char **line, char **concat)
 {
 	char	*cut;
@@ -43,9 +40,6 @@ static t_bool	has_newline(t_this *this, char **line, char **concat)
 	return (false);
 }
 
-/*
-** Cut and return the string part after the endline
-*/
 static char		*cut_after_endl(char *buffer, char **concat)
 {
 	char	*cut;
@@ -60,9 +54,6 @@ static char		*cut_after_endl(char *buffer, char **concat)
 	return (NULL);
 }
 
-/*
-** Read the file until the first endline encountered
-*/
 static ssize_t	read_until_endl(t_this *this, char **line)
 {
 	char	*buffer;
@@ -90,9 +81,6 @@ static ssize_t	read_until_endl(t_this *this, char **line)
 	return (0);
 }
 
-/*
-** Register a new file descriptor into the linked list
-*/
 static t_this	*load_new_fd(const int fd, t_this *first)
 {
 	t_this	*new;
@@ -108,9 +96,6 @@ static t_this	*load_new_fd(const int fd, t_this *first)
 	return (new);
 }
 
-/*
-** The get_next_line function
-*/
 int				get_next_line(const int fd, char **line)
 {
 	static t_this	*first = NULL;
