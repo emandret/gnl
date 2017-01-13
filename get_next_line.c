@@ -6,7 +6,7 @@
 /*   By: emandret <emandret@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/12 11:23:11 by emandret          #+#    #+#             */
-/*   Updated: 2017/01/13 19:03:22 by emandret         ###   ########.fr       */
+/*   Updated: 2017/01/13 21:32:10 by emandret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 */
 static t_bool	has_newline(t_this *this, char **line, char **concat);
 static char		*cut_after_endl(char *buffer, char **concat);
-static int		read_until_endl(t_this *this, char **line);
+static ssize_t	read_until_endl(t_this *this, char **line);
 static t_this	*load_new_fd(const int fd, t_this *first);
 
 /*
@@ -63,11 +63,11 @@ static char		*cut_after_endl(char *buffer, char **concat)
 /*
 ** Read the file until the first endline encountered
 */
-static int		read_until_endl(t_this *this, char **line)
+static ssize_t	read_until_endl(t_this *this, char **line)
 {
 	char	*buffer;
 	char	*concat;
-	int		ret;
+	ssize_t	ret;
 
 	if (has_newline(this, line, &concat))
 		return (1);
