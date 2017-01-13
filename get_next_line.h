@@ -6,7 +6,7 @@
 /*   By: emandret <emandret@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/12 11:23:11 by emandret          #+#    #+#             */
-/*   Updated: 2017/01/12 22:00:18 by emandret         ###   ########.fr       */
+/*   Updated: 2017/01/13 19:01:46 by emandret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,5 @@ typedef struct		s_this
 }					t_this;
 
 int					get_next_line(const int fd, char **line);
-t_bool				has_newline(t_this *this, char **line, char **concat);
-char				*cut_after_endl(char *buffer, char **concat);
-int					read_until_endl(t_this *this, char **line);
-t_this				*load_new_fd(const int fd, t_this *first);
 
 #endif

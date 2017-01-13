@@ -6,13 +6,24 @@
 /*   By: emandret <emandret@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/12 11:23:11 by emandret          #+#    #+#             */
-/*   Updated: 2017/01/12 23:10:35 by emandret         ###   ########.fr       */
+/*   Updated: 2017/01/13 19:03:22 by emandret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-t_bool	has_newline(t_this *this, char **line, char **concat)
+/*
+** Utils functions
+*/
+static t_bool	has_newline(t_this *this, char **line, char **concat);
+static char		*cut_after_endl(char *buffer, char **concat);
+static int		read_until_endl(t_this *this, char **line);
+static t_this	*load_new_fd(const int fd, t_this *first);
+
+/*
+** Check if a newline is present in the static stored content
+*/
+static t_bool	has_newline(t_this *this, char **line, char **concat)
 {
 	char	*cut;
 
@@ -32,7 +43,10 @@ t_bool	has_newline(t_this *this, char **line, char **concat)
 	return (false);
 }
 
-char	*cut_after_endl(char *buffer, char **concat)
+/*
+** Cut and return the string part after the endline
+*/
+static char		*cut_after_endl(char *buffer, char **concat)
 {
 	char	*cut;
 
@@ -46,7 +60,10 @@ char	*cut_after_endl(char *buffer, char **concat)
 	return (NULL);
 }
 
-int		read_until_endl(t_this *this, char **line)
+/*
+** Read the file until the first endline encountered
+*/
+static int		read_until_endl(t_this *this, char **line)
 {
 	char	*buffer;
 	char	*concat;
@@ -73,7 +90,10 @@ int		read_until_endl(t_this *this, char **line)
 	return (0);
 }
 
-t_this	*load_new_fd(const int fd, t_this *first)
+/*
+** Register a new file descriptor into the linked list
+*/
+static t_this	*load_new_fd(const int fd, t_this *first)
 {
 	t_this	*new;
 
@@ -88,7 +108,10 @@ t_this	*load_new_fd(const int fd, t_this *first)
 	return (new);
 }
 
-int		get_next_line(const int fd, char **line)
+/*
+** The get_next_line function
+*/
+int				get_next_line(const int fd, char **line)
 {
 	static t_this	*first = NULL;
 	t_this			*this;
